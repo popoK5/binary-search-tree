@@ -1,0 +1,164 @@
+#include <iostream>
+
+using namespace std;
+
+// Node structure for the binary tree
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int value) {
+        data = value;
+        left = right = nullptr;
+    }
+};
+
+// Class for Binary Tree
+class BinaryTree {
+private:
+    Node* root;
+
+    // Helper function to insert a node
+    Node* insert(Node* node, int value) {
+        if (node == nullptr) {
+            return new Node(value);
+        }
+        if (value < node->data) {
+            node->left = insert(node->left, value);
+        } else {
+            node->right = insert(node->right, value);
+        }
+        return node;
+    }
+
+    // Helper function to search a node
+    bool search(Node* node, int value) {
+        if (node == nullptr) {
+            return false;
+        }
+        if (node->data == value) {
+            return true;
+        }
+        return value < node->data ? search(node->left, value) : search(node->right, value);
+    }
+
+    // Helper functions for traversal
+    void inOrder(Node* node) {
+        if (node) {
+            inOrder(node->left);
+            cout << node->data << " ";
+            inOrder(node->right);
+        }
+    }
+
+    void preOrder(Node* node) {
+        if (node) {
+            cout << node->data << " ";
+            preOrder(node->left);
+            preOrder(node->right);
+        }
+    }
+
+    void postOrder(Node* node) {
+        if (node) {
+            postOrder(node->left);
+            postOrder(node->right);
+            cout << node->data << " ";
+        }
+    }
+
+public:
+    BinaryTree() : root(nullptr) {}
+
+    void create(int value) {
+        root = insert(root, value);
+    }
+
+    bool search(int value) {
+        return search(root, value);
+    }
+
+    void inOrder() {
+        cout << "In-order Traversal: ";
+        inOrder(root);
+        cout << endl;
+    }
+
+    void preOrder() {
+        cout << "Pre-order Traversal: ";
+        preOrder(root);
+        cout << endl;
+    }
+
+    void postOrder() {
+        cout << "Post-order Traversal: ";
+        postOrder(root);
+        cout << endl;
+    }
+};
+
+int main() {
+    BinaryTree tree;
+    int choice, value;
+
+    do {
+        cout << "Menu:\n";
+        cout << "1. Create (Insert)\n";
+        cout << "2. Search\n";
+        cout << "3. Recursive Traversal\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter value to insert: ";
+                cin >> value;
+                tree.create(value);
+                break;
+
+            case 2:
+                cout << "Enter value to search: ";
+                cin >> value;
+                if (tree.search(value)) {
+                    cout << value << " found in the tree.\n";
+                } else {
+                    cout << value << " not found in the tree.\n";
+                }
+                break;
+
+            case 3:
+                cout << "Choose Traversal Type:\n";
+                cout << "1. In-order\n";
+                cout << "2. Pre-order\n";
+                cout << "3. Post-order\n";
+                int traversalChoice;
+                cin >> traversalChoice;
+                switch (traversalChoice) {
+                    case 1:
+                        tree.inOrder();
+                        break;
+                    case 2:
+                        tree.preOrder();
+                        break;
+                    case 3:
+                        tree.postOrder();
+                        break;
+                    default:
+                        cout << "Invalid choice.\n";
+                }
+                break;
+
+            case 4:
+                cout << "Exiting...\n";
+                break;
+
+            default:
+                cout << "Invalid choice. Please try again.\n";
+        }
+
+    } while (choice != 4);
+
+    return 0;
+}
